@@ -1,11 +1,9 @@
-"""
-    Module to handle Vertical Flattening
-"""
+from General_Exceptions import VerticalFlattenException
 
 class VerticalFlatten():
 
     def __init__(self):
-        list_of_all_schemas = []
+        pass
 
     def dict_as_value(self, name, dict_as_value):
         list_to_return = []
@@ -22,7 +20,7 @@ class VerticalFlatten():
                 list_to_return.append(name+"."+key)
         return list_to_return
 
-    def get_vertical_flatten_schema(self, json_as_dict, initial_key):
+    def vertical_flatten_call(self, json_as_dict, return_as_dict=None):
         '''
             This function will take json as dict and flatten it vertically
             If the value is of type string, int, float, or anything other then list, treat it as
@@ -30,6 +28,7 @@ class VerticalFlatten():
             Returns a dict with key specifying table/schema number and corresponding value is list
             of columns/attributes for that schema.
         '''
+        overall_list = []
         schema_list = []
         dict_of_schemas = {}
         for key, value in json_as_dict.items():
@@ -40,18 +39,25 @@ class VerticalFlatten():
             elif isinstance(value, list):
                 bool_val = self.validate_for_another_schema(value)
                 if bool_val:
-                    new_schema_dict = self.get_vertical_flatten_schema(value[0], initial_key+1)
-                    dict_of_schemas.update(new_schema_dict)
+                    list_of_nested_lists = self.vertical_flatten_call(value[0])
+                    for i in list_of_nested_lists:
+                        overall_list.append(i)
                 else:
                     '''
                         Raise exception
                     '''
-                    pass
+                    raise VerticalFlattenException("All Elements are Not of Type Dict.")
             else:
                 schema_list.append(key)
-            dict_of_schemas[initial_key] = schema_list
-
-        return dict_of_schemas
+        overall_list.append(schema_list)
+        if return_as_dict == 1:
+            count_var = 1
+            final_dict = {}
+            for i in overall_list:
+                final_dict[count_var] = i
+                count_var = count_var+1
+            return final_dict
+        return overall_list
 
     def validate_for_another_schema(self, list_to_verify):
         '''
@@ -79,7 +85,7 @@ sample_document = {
  {
  "date" : "2014-03-03T00:00:00Z",
  "grade" : "A",
- "score" : 5
+ "score" : [{"a": 3, "b": 2, "c": 1, "d":[{"k": 2, "e": 2, "f": 1}, {"k": 2, "e": 2, "f": 1}]}, {"a": 2, "b": 2, "c": 1, "d":[]}, {"a": 5, "b": 2, "c": 1, "d":[]}, {"a": 8, "b": 2, "c": 1, "d":[]}]
  }, {
  "date" : "2013-09-11T00:00:00Z",
  "grade" : "A",
@@ -102,8 +108,8 @@ sample_document = {
  "restaurant_id" : "30075445"
 }
 
-# vf = VerticalFalten()
-#print(vf.get_vertical_flatten_schema(sample_document, 1))
+vf = VerticalFlatten()
+print(vf.vertical_flatten_call(sample_document, return_as_dict=1))
 
 # [{"Quality_Food": 4, "Safety": 4, "Quantity_Food": 5}, {"Quality_Food": 4, "Safety": 4, "Quantity_Food": 5}]
 # [{"a": 3, "b": 2, "c": 1, "d":[{"k": 2, "e": 2, "f": 1}, {"k": 2, "e": 2, "f": 1}]}, {"a": 2, "b": 2, "c": 1, "d":[]}, {"a": 5, "b": 2, "c": 1, "d":[]}, {"a": 8, "b": 2, "c": 1, "d":[]}]
