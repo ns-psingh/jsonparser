@@ -12,7 +12,7 @@ class VerticalFlatten():
             elif isinstance(value, list):
                 bool_val = self.validate_for_another_schema(value)
                 if bool_val:
-                    self.get_vertical_flatten_schema(value[0])
+                    self.vertical_flatten_call(value[0])
                 else:
                     list_to_return.append(name+"."+key+".csv")
             else:
