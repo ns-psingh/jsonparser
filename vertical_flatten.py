@@ -1,6 +1,5 @@
 from General_Exceptions import VerticalFlattenException
-
-class VerticalFalten():
+class VerticalFlatten():
 
     def __init__(self):
         pass
@@ -18,16 +17,17 @@ class VerticalFalten():
                     list_to_return.append(name+"."+key+".csv")
             else:
                 list_to_return.append(name+"."+key)
-        return(list_to_return)
+        return list_to_return
 
     def vertical_flatten_call(self, json_as_dict, return_as_dict=None):
         '''
             This function will take json as dict and flatten it vertically
             If the value is of type string, int, float, or anything other then list, treat it as
-            column of schema
+            column of schema.
         '''
         overall_list = []
         schema_list = []
+        dict_of_schemas = {}
         for key, value in json_as_dict.items():
             if isinstance(value, dict):
                 temp_val = self.dict_as_value(key, value)
@@ -105,8 +105,8 @@ sample_document = {
  "restaurant_id" : "30075445"
 }
 
-vf = VerticalFalten()
-print(vf.vertical_flatten_call(sample_document, return_as_dict=1))
+# vf = VerticalFlatten()
+# print(vf.vertical_flatten_call(sample_document, return_as_dict=0))
 
 # [{"Quality_Food": 4, "Safety": 4, "Quantity_Food": 5}, {"Quality_Food": 4, "Safety": 4, "Quantity_Food": 5}]
 # [{"a": 3, "b": 2, "c": 1, "d":[{"k": 2, "e": 2, "f": 1}, {"k": 2, "e": 2, "f": 1}]}, {"a": 2, "b": 2, "c": 1, "d":[]}, {"a": 5, "b": 2, "c": 1, "d":[]}, {"a": 8, "b": 2, "c": 1, "d":[]}]
