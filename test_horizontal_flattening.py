@@ -86,5 +86,12 @@ class TestCovid(unittest.TestCase):
                                                               'address.zipcode': '10462'}
 
 
+    def test_horizontal_flatten_hybrid_case(self):
+        self.hf.flatten_arrays_set_value(1)
+        self.hf.flatten_objects_set_value(True)
+        sample_document_ = copy.deepcopy(sample_document)
+        self.hf.horizontal_flat(sample_document_)
+
+
 
     
