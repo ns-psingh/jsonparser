@@ -1,5 +1,8 @@
+"""
+    Module to handle Vertical Flattening
+"""
 
-class VerticalFalten():
+class VerticalFlatten():
 
     def __init__(self):
         list_of_all_schemas = []
@@ -12,20 +15,23 @@ class VerticalFalten():
             elif isinstance(value, list):
                 bool_val = self.validate_for_another_schema(value)
                 if bool_val:
-                    self.vertical_flatten_call(value[0])
+                    self.get_vertical_flatten_schema(value[0])
                 else:
                     list_to_return.append(name+"."+key+".csv")
             else:
                 list_to_return.append(name+"."+key)
-        return(list_to_return)
+        return list_to_return
 
-    def vertical_flatten_call(self, json_as_dict):
+    def get_vertical_flatten_schema(self, json_as_dict, initial_key):
         '''
             This function will take json as dict and flatten it vertically
             If the value is of type string, int, float, or anything other then list, treat it as
-            column of schema
+            column of schema.
+            Returns a dict with key specifying table/schema number and corresponding value is list
+            of columns/attributes for that schema.
         '''
         schema_list = []
+        dict_of_schemas = {}
         for key, value in json_as_dict.items():
             if isinstance(value, dict):
                 temp_val = self.dict_as_value(key, value)
@@ -34,7 +40,8 @@ class VerticalFalten():
             elif isinstance(value, list):
                 bool_val = self.validate_for_another_schema(value)
                 if bool_val:
-                    self.vertical_flatten_call(value[0])
+                    new_schema_dict = self.get_vertical_flatten_schema(value[0], initial_key+1)
+                    dict_of_schemas.update(new_schema_dict)
                 else:
                     '''
                         Raise exception
@@ -42,7 +49,9 @@ class VerticalFalten():
                     pass
             else:
                 schema_list.append(key)
-        print(schema_list)
+            dict_of_schemas[initial_key] = schema_list
+
+        return dict_of_schemas
 
     def validate_for_another_schema(self, list_to_verify):
         '''
@@ -93,8 +102,8 @@ sample_document = {
  "restaurant_id" : "30075445"
 }
 
-vf = VerticalFalten()
-vf.vertical_flatten_call(sample_document)
+# vf = VerticalFalten()
+#print(vf.get_vertical_flatten_schema(sample_document, 1))
 
 # [{"Quality_Food": 4, "Safety": 4, "Quantity_Food": 5}, {"Quality_Food": 4, "Safety": 4, "Quantity_Food": 5}]
 # [{"a": 3, "b": 2, "c": 1, "d":[{"k": 2, "e": 2, "f": 1}, {"k": 2, "e": 2, "f": 1}]}, {"a": 2, "b": 2, "c": 1, "d":[]}, {"a": 5, "b": 2, "c": 1, "d":[]}, {"a": 8, "b": 2, "c": 1, "d":[]}]
