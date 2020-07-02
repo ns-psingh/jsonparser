@@ -29,7 +29,7 @@ class DB():
         data = []
         key_count = 0
         for value in document.values():
-            data.append(value)
+            data.append(str(value))
             key_count = key_count + 1
         
         # This segment is used to compute VALUES(?,?,?) where no. of ? = no. of columns
@@ -41,7 +41,7 @@ class DB():
 
         try:
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO HORIZONTAL_FLAT VALUES" + s,tuple(data))
+            cursor.execute("INSERT INTO HORIZONTAL_FLAT VALUES {}".format(tuple(data)))
         except Error as e:
             print("Error encountered while inserting values into table for Horizontal-Flattening -> {}".format(e))
         
