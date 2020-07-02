@@ -115,6 +115,13 @@ class TestCovid(unittest.TestCase):
                                                                           'grade': 'A', 
                                                                           'score': 2}
                                                             }
+    def test_horizontal_flatten_embedded_document_flatten_object(self):
+        test_document = {"field1":{"field2":{"field3": "key"}}}
+        self.hf.flatten_arrays_set_value(0)
+        self.hf.flatten_objects_set_value(True)
+        assert self.hf.horizontal_flat(test_document) == {'field1.field2.field3': 'key'}
+
+
         
 
 

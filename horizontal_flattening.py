@@ -44,6 +44,9 @@ class HorizonalFlattening():
         """
         result = {}
         for key in list(document.keys()):
+            if isinstance(document[key], dict):
+                document = self.horizontal_flat(document)
+                key = list(document.keys())[0]            
             result[field_name+"."+key] = document[key]
         return result
     
