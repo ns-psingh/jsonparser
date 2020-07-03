@@ -48,34 +48,35 @@ class TestVerticalFlatten(unittest.TestCase):
         document = copy.deepcopy(sample_document)
         return_as_dict = 1
         assert self.vf.vertical_flatten_call(document, return_as_dict) == {
-                                                                            1: ['k', 'e', 'f'],
-                                                                            2: ['a', 'b', 'c'],
-                                                                            3: ['date', 'grade'],
-                                                                            4: ['_id',
-                                                                                'address.building',
-                                                                                'address.coord.csv',
-                                                                                'address.street',
-                                                                                'address.zipcode',
-                                                                                'borough',
-                                                                                'cuisine',
-                                                                                'name',
-                                                                                'restaurant_id']
+                                                                            1: [{'k': 2}, {'e': 2}, {'f': 1}],
+                                                                            2: [{'a': 3}, {'b': 2}, {'c': 1}],
+                                                                            3: [{'date': '2014-03-03T00:00:00Z'}, {'grade': 'A'}],
+                                                                            4: [{'_id': '5780046cd5a397806c3dab38'},
+                                                                                {'address.building': '1007'},
+                                                                                {'address.coord.csv': '-73.856077,40.848447,'},
+                                                                                {'address.street': 'Morris Park Ave'},
+                                                                                {'address.zipcode': '10462'},
+                                                                                {'borough': 'Bronx'},
+                                                                                {'cuisine': 'Bakery'},
+                                                                                {'name': 'Morris Park Bake Shop'},
+                                                                                {'restaurant_id': '30075445'}]
                                                                         }
     def test_vertical_flatten_schema_as_list(self):
         document = copy.deepcopy(sample_document)
         return_as_dict = 0
         assert self.vf.vertical_flatten_call(document, return_as_dict) == [
-                                                                            ['k', 'e', 'f'],
-                                                                            ['a', 'b', 'c'],
-                                                                            ['date', 'grade'],
-                                                                            ['_id',
-                                                                            'address.building',
-                                                                            'address.coord.csv',
-                                                                            'address.street',
-                                                                            'address.zipcode',
-                                                                            'borough',
-                                                                            'cuisine',
-                                                                            'name',
-                                                                            'restaurant_id']
+                                                                            [{'k': 2}, {'e': 2}, {'f': 1}],
+                                                                            [{'a': 3}, {'b': 2}, {'c': 1}],
+                                                                            [{'date': '2014-03-03T00:00:00Z'}, {'grade': 'A'}],
+                                                                            [{'_id': '5780046cd5a397806c3dab38'},
+                                                                            {'address.building': '1007'},
+                                                                            {'address.coord.csv': '-73.856077,40.848447,'},
+                                                                            {'address.street': 'Morris Park Ave'},
+                                                                            {'address.zipcode': '10462'},
+                                                                            {'borough': 'Bronx'},
+                                                                            {'cuisine': 'Bakery'},
+                                                                            {'name': 'Morris Park Bake Shop'},
+                                                                            {'restaurant_id': '30075445'}]
                                                                         ]
+
                                                                         
