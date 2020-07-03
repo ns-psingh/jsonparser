@@ -99,7 +99,7 @@ class VerticalFlatten():
             create a connection to DB, after creating DB with name name_of_db
             Supports --> Create DB, Table, Insert, Query
         '''
-        db = VerticalFlattenDataBase(name_of_table)
+        db = VerticalFlattenDataBase(name_of_db)
         
         if db is not None:
             for key, j in schemas_with_values.items():
@@ -157,43 +157,3 @@ class VerticalFlatten():
 
         
 
-sample_document = {
- "_id" : "5780046cd5a397806c3dab38",
- "address" : {
- "building" : "1007",
- "coord" : [-73.856077, 40.848447],
- "Parth" : [{"a1": 2, "c1": 34, "b1": [{"e1": 22, "f1":[{"g1": 23}]}, {"ee1": 32}]}, 
-            {"a1": 21, "b1": 31}],
- "Abcde" : [{"a1": 2, "c1": 34, "b1": {'la': 'li', 'ga': 'gi', 'ra': [{'pii': 'pa', 'po':'pu', 'test': {"ggs": "okay", "last_level": [{"parth": 10}]}}]}}, 
-            {"a1": 21, "b1": 31}],
- "street" : "Morris Park Ave",
- "zipcode" : "10462"
- },
- "borough" : "Bronx",
- "cuisine" : "Bakery",
- "grades" : [
- {
- "date" : "2014-03-03T00:00:00Z",
- "grade" : "A",
- "score" : [{"a": 3, "b": 2, "c": 1, "d":[{"k": 2, "e": 2, "f": 1}, {"k": 2, "e": 2, "f": 1}]}, {"a": 2, "b": 2, "c": 1, "d":[]}, {"a": 5, "b": 2, "c": 1, "d":[]}, {"a": 8, "b": 2, "c": 1, "d":[]}]
- }, {
- "date" : "2013-09-11T00:00:00Z",
- "grade" : "A",
- "score" : 6
- }, {
- "date" : "2013-01-24T00:00:00Z",
- "grade" : "A",
- "score" : 10
- }, {
- "date" : "2011-11-23T00:00:00Z",
- "grade" : "A",
- "score" : 9
- }, {
- "date" : "2011-03-10T00:00:00Z",
- "grade" : "B",
- "score" : 14
- }
- ],
- "name" : "Morris Park Bake Shop",
- "restaurant_id" : "30075445"
-}
