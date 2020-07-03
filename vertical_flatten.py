@@ -1,4 +1,5 @@
 from General_Exceptions import VerticalFlattenException
+from database_vertical import VerticalFlattenDataBase
 
 class VerticalFlatten():
 
@@ -24,13 +25,13 @@ class VerticalFlatten():
                         csv_value = csv_value+str(i)
                         csv_value = csv_value+","
                     temp_dict = {}
-                    temp_dict[name+"."+key+".csv"] = csv_value
+                    temp_dict[name+"_"+key+"_csv"] = csv_value
                     list_to_return.append(temp_dict)
                 else:
                     raise VerticalFlattenException("All Elements are Not of Type Str Int, May include List and Dict.") 
             else:
                 temp_dict = {}
-                temp_dict[name+"."+key] = value
+                temp_dict[name+"_"+key] = value
                 list_to_return.append(temp_dict)
         return list_to_return
 
@@ -92,6 +93,68 @@ class VerticalFlatten():
                 return False
         return True
 
+    def vertical_database_queries(self, schemas_with_values, name_of_db):
+        '''
+            This function will Take schemas with values, seprate them , 
+            create a connection to DB, after creating DB with name name_of_db
+            Supports --> Create DB, Table, Insert, Query
+        '''
+        db = VerticalFlattenDataBase(name_of_table)
+        
+        if db is not None:
+            for key, j in schemas_with_values.items():
+                list_of_columns = j
+                list_to_send = []
+                list_of_values = []
+                for dict_as_column in list_of_columns:
+                    try:
+                        temp_list = dict_as_column.keys()
+                        list_to_send.append(list(temp_list)[0])
+                        temp_list_val = dict_as_column.values()
+                        list_of_values.append(list(temp_list_val)[0])
+                    except:
+                        print("Som Error")
+                updated_colums = [x+" "+"CHAR(40)" for x in list_to_send]
+
+                str_of_colums = ""
+                for i in updated_colums:
+                    str_of_colums = str_of_colums+i+", "
+                str_of_colums = str_of_colums[:-2]
+
+                insert_command_columns = ""
+                for i in list_to_send:
+                    insert_command_columns = insert_command_columns+i+","
+                insert_command_columns = insert_command_columns[:-1]
+
+                sql_create_command = '''CREATE TABLE IF NOT EXISTS Table_{} ({})'''.format(str(key), str_of_colums)
+                question_mark_for_data = "("
+                len_of_list_of_values = len(list_of_values)
+                for _ in range(len_of_list_of_values):
+                    question_mark_for_data = question_mark_for_data+"?,"
+                question_mark_for_data = question_mark_for_data[:-1]+")"
+                sql_insert_command = '''INSERT INTO Table_{} ({}) VALUES {}'''.format(str(key), insert_command_columns, question_mark_for_data)
+
+                # Insert function call
+                bool_creation = db.create_vertical_tables(db, sql_create_command)
+                if bool_creation:
+                    bool_insert = db.insert_vertical_data(db, sql_insert_command, tuple(list_of_values))
+                    if bool_insert:
+                        select_query = '''Select * From Table_{}'''.format(str(key))
+                        bool_select_query = db.query_vertical_data(db, select_query)
+                        if bool_select_query:
+                            pass
+                        else:
+                            print("Query Error for Table_{}".format(str(key)))    
+                    else:
+                        print("Insertion Error for Table_{}".format(str(key)))    
+                else:
+                    print("Creation Error for Table_{}".format(str(key)))
+                    print(sql_create_command)
+                print("--------------------------------")
+
+        else:
+            print("Connection Error!")
+
         
 
 sample_document = {
@@ -135,9 +198,10 @@ sample_document = {
  "restaurant_id" : "30075445"
 }
 
+vf = VerticalFlatten()
+temp = vf.vertical_flatten_call(sample_document_last, return_as_dict=1)
+vf.vertical_database_queries(temp, "vertical_database.db")
 
-# vf = VerticalFlatten()
-# temp = vf.vertical_flatten_call(sample_document, return_as_dict=1)
 # for i, j in temp.items():
 #     print(i, j)
 
