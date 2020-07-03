@@ -42,6 +42,7 @@ class DB():
         try:
             cursor = conn.cursor()
             cursor.execute("INSERT INTO HORIZONTAL_FLAT VALUES {}".format(tuple(data)))
+            conn.commit()
         except Error as e:
             print("Error encountered while inserting values into table for Horizontal-Flattening -> {}".format(e))
         
