@@ -197,13 +197,3 @@ sample_document = {
  "name" : "Morris Park Bake Shop",
  "restaurant_id" : "30075445"
 }
-
-vf = VerticalFlatten()
-temp = vf.vertical_flatten_call(sample_document_last, return_as_dict=1)
-vf.vertical_database_queries(temp, "vertical_database.db")
-
-# for i, j in temp.items():
-#     print(i, j)
-
-# [{"Quality_Food": 4, "Safety": 4, "Quantity_Food": 5}, {"Quality_Food": 4, "Safety": 4, "Quantity_Food": 5}]
-# [{"a": 3, "b": 2, "c": 1, "d":[{"k": 2, "e": 2, "f": 1}, {"k": 2, "e": 2, "f": 1}]}, {"a": 2, "b": 2, "c": 1, "d":[]}, {"a": 5, "b": 2, "c": 1, "d":[]}, {"a": 8, "b": 2, "c": 1, "d":[]}]
