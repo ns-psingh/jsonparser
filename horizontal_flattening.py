@@ -1,7 +1,6 @@
 """
 Module for handling horizontal flatenning
 """
-import pprint
 from database import DB
 class HorizonalFlattening():
     
