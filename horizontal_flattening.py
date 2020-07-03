@@ -33,7 +33,7 @@ class HorizonalFlattening():
             elif isinstance(document[field], list) and self.flatten_arrays_get_value() > 0: #bug_7
                 flatenned_results = self.restructure_flatten_array(field, document[field], self.flatten_arrays_get_value())
                 for _ in range(0, self.flatten_arrays_get_value()):
-                    del document[field][_]
+                    del document[field][0]
                 for result in list(flatenned_results.keys()):
                     document[result] = flatenned_results[result] 
         return document
