@@ -1,7 +1,7 @@
 """
 Module for handling horizontal flatenning
 """
-
+from database import DB
 class HorizonalFlattening():
     
     def __init__(self):
@@ -59,9 +59,16 @@ class HorizonalFlattening():
             result[field_name+"."+str(_)] = document[_]
         return result
 
-    def display_in_sql_table(self):
+    def display_in_sql_table(self, document):
         """
         This function will make create a SQL
         based table using a relational SQL server
         and insert all records
         """
+        db = DB("horizontal_database.db")
+        conn = db.create_connection()
+        if conn is not None:
+            db.create_table_horizontal(conn, document)
+            db.insert_data_horizontal(conn, document)
+        else:
+            print("Error while creating database connection")
